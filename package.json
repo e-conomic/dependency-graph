@@ -1,0 +1,26 @@
+{ "name": "dependency-graph-builder"
+, "version": "0.0.0"
+, "description": "A tool for building requirejs dependency graphs."
+, "main": "index.js"
+, "directories":
+  { "test": "test"
+  }
+, "scripts":
+  { "test": "mocha"
+  }
+, "dependencies":
+  { "es6-shim": "^0.13.0"
+  , "neo4j": "^1.1.0"
+  }
+, "devDependencies":
+  { "mocha": "^1.20.1"
+  , "chai": "^1.9.1"
+  }
+, "keywords":
+  [ "requirejs"
+  , "neo4j"
+  , "dependency-graph"
+  ]
+, "author": "Benjamin Horsleben"
+, "license": "WTFPL"
+}
