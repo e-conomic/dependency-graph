@@ -25,4 +25,28 @@ describe('unit/list-deps.js', function() {
 			})
 		})
 	})
+
+	describe('When testing the content:\n', function() {
+		var tests = [
+			['require(function() { return 1 })', []],
+			['require(["abc"], function(abc) { return abc })', ['abc']],
+			['require(["abc", "def"], function() { return abc })', ['abc', 'def']],
+			['require([\'abc\', "def"], function() { return abc })', ['abc', 'def']],
+			['require([\'abc\', "def",], function() { return abc })', ['abc', 'def']],
+			['require([\'abc\',\n"def"], function() { return abc })', ['abc', 'def']],
+			['require([\n\'abc\', "def"], function() { return abc })', ['abc', 'def']],
+			['require([\'abc\', "def"], function() { return abc })', ['abc', 'def']],
+			['require([\'abc\', "def"\n], function() { return abc })', ['abc', 'def']],
+		]
+		tests.forEach(function(test) {
+			describe(test[0], function() {
+				beforeEach(function() {
+					result = listDeps(test[0])
+				})
+				it('\nshould return the expected values', function() {
+					expect(result).to.deep.equal(test[1])
+				})
+			})
+		})
+	})
 })
