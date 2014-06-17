@@ -71,4 +71,20 @@ describe('unit/list-deps.js', function() {
 			})
 		})
 	})
+
+	describe('When requesting plugins:\n', function() {
+		var tests = [
+			['define(["abc!def"], function(abc) { return abc })', ['abc', 'abc!def']],
+		]
+		tests.forEach(function(test) {
+			describe(test[0], function() {
+				beforeEach(function() {
+					result = listDeps(test[0])
+				})
+				it('\nshould return the expected values', function() {
+					expect(result).to.deep.equal(test[1])
+				})
+			})
+		})
+	})
 })

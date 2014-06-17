@@ -7,10 +7,19 @@ function parse(file) {
 		return line.replace(/\/\/.*$/, '')
 	}).join('')
 	.replace(/\/\*(?:.|[\n\r])*\*\//g, '')
-	return dependencies.split(',').map(function(dep) {
+
+	return [].concat.apply([], dependencies.split(',').map(function(dep) {
 		return dep.trim().slice(1, -1)
 	})
 	.filter(function(dep) {
 		return !!dep
 	})
+	.map(function(dep) {
+		var pluginSplit = dep.split('!')
+		if(pluginSplit.length == 2) {
+			pluginSplit[1] = pluginSplit.join('!')
+		}
+		return pluginSplit
+	})
+	)
 }
