@@ -16,6 +16,8 @@ describe('unit/list-deps.js', function() {
 			['define([//test\n"abc", "def"], function() { return abc })', ['abc', 'def']],
 			['define(["abc",//test\n "def"], function() { return abc })', ['abc', 'def']],
 			['define(["abc", "def"//test\n], function() { return abc })', ['abc', 'def']],
+			['define("name", ["abc"], function(abc) { return abc })', ['abc']],
+			['define(\'name\', ["abc"], function(abc) { return abc })', ['abc']],
 		]
 		tests.forEach(function(test) {
 			describe(test[0], function() {

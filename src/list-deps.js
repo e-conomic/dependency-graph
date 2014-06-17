@@ -1,7 +1,7 @@
 module.exports = parse
 
 function parse(file) {
-	var results = file.match(/(?:define|require)\(\[((?:.|[\n\r])+?)\]/m)
+	var results = file.match(/(?:define|require)\((?:[^\[]+,[\n\r ]*)?\[((?:.|[\n\r])+?)\]/m)
 	var dependencies = (results || ['', ''])[1]
 	dependencies = dependencies.split(/[\r\n]/g).map(function(line) {
 		return line.replace(/\/\/.*$/, '')
