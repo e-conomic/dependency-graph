@@ -6,6 +6,7 @@ function parse(file) {
 	dependencies = dependencies.split(/[\r\n]/g).map(function(line) {
 		return line.replace(/\/\/.*$/, '')
 	}).join('')
+	.replace(/\/\*(?:.|[\n\r])*\*\//g, '')
 	return dependencies.split(',').map(function(dep) {
 		return dep.trim().slice(1, -1)
 	})

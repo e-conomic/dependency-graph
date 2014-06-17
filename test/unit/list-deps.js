@@ -52,4 +52,23 @@ describe('unit/list-deps.js', function() {
 			})
 		})
 	})
+
+	describe('When testing the content:\n', function() {
+		var tests = [
+			['define(function() { return 1 })', []],
+			['define([/* test */"abc"], function(abc) { return abc })', ['abc']],
+			['define(["abc"/*bum*/, "def"], function() { return abc })', ['abc', 'def']],
+			['define([\'abc\', "def"/*bang*/], function() { return abc })', ['abc', 'def']],
+		]
+		tests.forEach(function(test) {
+			describe(test[0], function() {
+				beforeEach(function() {
+					result = listDeps(test[0])
+				})
+				it('\nshould return the expected values', function() {
+					expect(result).to.deep.equal(test[1])
+				})
+			})
+		})
+	})
 })
