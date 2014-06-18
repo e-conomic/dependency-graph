@@ -2,7 +2,7 @@ describe('unit/list-deps.js', function() {
 	var listDeps = require('../../src/list-deps')
 	var result
 
-	describe('When testing the content:\n', function() {
+	describe('define calls:\n', function() {
 		var tests = [
 			['define(function() { return 1 })', []],
 			['define(["abc"], function(abc) { return abc })', ['abc']],
@@ -31,9 +31,11 @@ describe('unit/list-deps.js', function() {
 		})
 	})
 
-	describe('When testing the content:\n', function() {
+	describe('require calls:\n', function() {
 		var tests = [
 			['require(function() { return 1 })', []],
+			['require("test")', ['test']],
+			['require(\'test\')', ['test']],
 			['require(["abc"], function(abc) { return abc })', ['abc']],
 			['require(["abc", "def"], function() { return abc })', ['abc', 'def']],
 			['require([\'abc\', "def"], function() { return abc })', ['abc', 'def']],
@@ -55,9 +57,8 @@ describe('unit/list-deps.js', function() {
 		})
 	})
 
-	describe('When testing the content:\n', function() {
+	describe('Multiline comments:\n', function() {
 		var tests = [
-			['define(function() { return 1 })', []],
 			['define([/* test */"abc"], function(abc) { return abc })', ['abc']],
 			['define(["abc"/*bum*/, "def"], function() { return abc })', ['abc', 'def']],
 			['define([\'abc\', "def"/*bang*/], function() { return abc })', ['abc', 'def']],
