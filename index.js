@@ -8,15 +8,26 @@ var neo = require('./src/neo4j')
 var resolveAnonymousModule = require('./src/resolve-anonymous-module')
 var cleanModules = require('./src/clean-modules')
 
-var args = yargs.argv
+var args = yargs
+	.usage('Usage: $0 <minified-js>')
+	.option('entry', {
+		alias: 'e',
+		default: [ 'default', 'sledgehammer/setup', 'bank/transfer-journal' ],
+		describe: 'The modules that should be marked as entry-points',
+	})
+	.option('m', {
+		alias: 'main',
+		default: 'default',
+		describe: 'The name of the main bundle',
+	})
+	.demand(1)
+	.argv
+
+var mainName = args.main
+var entryPoints = [].concat(args.entry)
 
 var startFile = args._[0]
 var contents = fs.readFileSync(startFile, 'utf8')
-
-var mainName = args.main || ''
-
-var entryPoints = [].concat(args.entry || [])
-
 
 var modules = amdetective(contents)
 
