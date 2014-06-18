@@ -9,6 +9,7 @@ var getNameParts = require('./src/get-name-parts')
 var replaceFromMap = require('./src/replace-from-map')
 
 var args = process.argv.slice(2)
+var neo = require('./src/neo4j')
 
 var startFile = args[0]
 var requireConf = args[1]
@@ -86,7 +87,12 @@ do {
 	depsToResolve = depsToResolve.concat(deps)
 } while(depsToResolve.length > 0)
 
-console.log(resolvedDeps)
+neo(Object.keys(resolvedDeps).map(function(key) { return resolvedDeps[key] }))
+	.then(console.log.bind(console, 'done'))
+	.catch(function(err) {
+		console.error(err)
+		console.error(err.stack)
+	})
 
 function getFilename(name) {
 	var parts = getNameParts(name)
