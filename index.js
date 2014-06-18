@@ -2,41 +2,69 @@ require('es6-shim')
 
 var path = require('path')
 var fs = require('fs')
+var yargs = require('yargs')
 
 var listDeps = require('./src/list-deps')
 var splitPath = require('./src/split-path')
 var getNameParts = require('./src/get-name-parts')
 var replaceFromMap = require('./src/replace-from-map')
 
-var args = process.argv.slice(2)
 var neo = require('./src/neo4j')
 
-var startFile = args[0]
-var requireConf = args[1]
+var args = yargs.argv
+
+var startFiles = args._
+var requireConf = args.requireConf
+var baseUrl = args.baseurl
 
 var conf = requireConf ? require(path.join(process.cwd(), requireConf)) : {}
 
-var baseUrl = path.dirname(startFile)
+if(!baseUrl) {
+	// should find the common parent dir
+	baseUrl = path.dirname(startFiles[0])
+}
 
-var resolvedDeps = { module: 'empty:', exports: 'empty:' }
+var resolvedDeps = {
+	module: {
+		name: 'module',
+		file: 'empty:',
+		external: true,
+	},
+	exports: {
+		name: 'exports',
+		file: 'empty:',
+		external: true,
+	},
+}
 
 var pathMap = conf.paths || {}
 
 Object.keys(pathMap).forEach(function(key) {
 	if(pathMap[key] == 'empty:') {
-		resolvedDeps[key] = pathMap[key]
+		resolvedDeps[key] = {
+			external: true,
+			file: pathMap[key],
+			name: key,
+		}
 	}
 })
 ;(conf.exclude || []).forEach(function(excluded) {
-	resolvedDeps[excluded] = 'empty:'
+	resolvedDeps[excluded] = {
+		name: excluded,
+		file: 'empty:',
+		excluded: true,
+	}
 })
 
 replaceFromMap = replaceFromMap.bind(null, pathMap)
 
-var depsToResolve = [ {
-	file: startFile,
-	name: path.relative(baseUrl, startFile).replace(path.extname(startFile), '')
-} ]
+var depsToResolve = startFiles.map(function(startFile) {
+	return {
+		file: startFile,
+		name: path.relative(baseUrl, startFile).replace(path.extname(startFile), ''),
+		entry: true,
+	}
+})
 
 do {
 	var nextDep = depsToResolve.shift()
@@ -83,7 +111,11 @@ do {
 		dep.file = getFilename(dep.name)
 		return dep
 	})
-	resolvedDeps[nextDep.name] = deps
+
+	nextDep.dependencies = deps.map(function(dep) {
+		return dep.name
+	})
+	resolvedDeps[nextDep.name] = nextDep
 	depsToResolve = depsToResolve.concat(deps)
 } while(depsToResolve.length > 0)
 

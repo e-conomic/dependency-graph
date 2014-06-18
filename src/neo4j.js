@@ -7,14 +7,18 @@ module.exports = function(modules) {
 		.then(function() {
 			var nodes = []
 			var relations = []
-			Object.keys(modules).forEach(function(name) {
-				var deps = modules[name]
+			modules.forEach(function(module) {
+				var deps = module.dependencies
+				var name = module.name
 				var normalName = normalizeName(name)
-				nodes.push('(' + normalName + ':File { name: "' + name + '"})')
+				nodes.push('(' + normalName + (module.entry?':Entry':'')+':File { name: "' + name + '"})')
 				if(Array.isArray(deps)) {
 					relations = relations.concat(deps.map(function(dep) {
 						return '('+normalName+')-[:DEPENDS_ON]->('+normalizeName(dep)+')'
 					}))
+				}
+				if(module.entry) {
+					nodes.push('(entry'+normalName+':Entry)-[:RUNS]->('+normalName+')')
 				}
 			})
 
