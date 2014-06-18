@@ -1,0 +1,17 @@
+#!/bin/sh
+
+dir=`dirname $0`
+build_file=$1
+
+if [ "$build_file" == "" ]; then
+	echo "Usage: build-graph <minified-js>"
+	exit 1
+fi
+
+node $dir/index.js \
+	--entry default \
+	--entry sledgehammer/setup \
+	--entry bank/transfer-popup \
+\
+	--main default \
+	"$1"
