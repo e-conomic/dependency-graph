@@ -13,6 +13,7 @@
   , "neo4j": "^1.1.0"
   , "yargs": "^1.2.3"
   , "amdetective": "^0.0.1"
+  , "concat-stream": "^1.4.6"
   }
 , "devDependencies":
   { "mocha": "^1.20.1"
