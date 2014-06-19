@@ -11,7 +11,8 @@ module.exports = function(modules) {
 				var deps = module.dependencies
 				var name = module.name
 				var normalName = normalizeName(name)
-				nodes.push('(' + normalName + (module.entry?':Entry':'')+':File { name: "' + name + '"})')
+				nodes.push('(' + normalName + (module.entry?':Entry':'')+
+					':Module { name: "' + name + '"})')
 				if(Array.isArray(deps)) {
 					relations = relations.concat(deps.map(function(dep) {
 						return '('+normalName+')-[:DEPENDS_ON]->('+normalizeName(dep)+')'

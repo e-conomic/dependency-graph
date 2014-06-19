@@ -16,7 +16,7 @@ var args = yargs
 	.example('$0 <local-file>', 'Read from local file')
 	.option('entry', {
 		alias: 'e',
-		default: [ 'default', 'sledgehammer/setup', 'bank/transfer-journal' ],
+		default: [ 'default', 'sledgehammer/setup', 'bank/transfer-popup' ],
 		describe: 'The modules that should be marked as entry-points',
 	})
 	.option('help', {
