@@ -1,3 +1,8 @@
+Archived
+======
+Tech Leads: Repository archived due to inactivity in more than 6 months.
+Please remember to add a CODEOWNERS file to the root of the repository when unarchiving.
+
 # Dependency graph
 
 A tool for building requirejs dependency graphs. It loads the result in to Neo4j
